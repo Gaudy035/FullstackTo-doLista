@@ -1,7 +1,14 @@
 <?php
 
+use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home');
+// Route::get('/', function () {
+//     return view('todos.index');
+// })->name('home');
+
+Route::resource('todos', TodoController::class);
+
+Route::get('/', function(){
+    return redirect()->route('todos.index');
 });
