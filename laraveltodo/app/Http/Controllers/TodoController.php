@@ -48,6 +48,17 @@ class TodoController extends Controller
     }
 
     /**
+     * Marks as completed
+     */
+    public function complete($id)
+    {
+        $todo = Todo::findOrFail($id);
+        $todo -> update(['is_completed' => true]);
+
+        return redirect() -> route('todos.index') -> with('success', 'marked as completed');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)

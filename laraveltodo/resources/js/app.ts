@@ -4,6 +4,7 @@ const add_btn = document.getElementById("add_btn") as HTMLButtonElement;
 
 const edit_btns: NodeListOf<HTMLButtonElement> =
     document.querySelectorAll(".edit_btn");
+
 const modal = document.getElementById("modal") as HTMLDivElement;
 const modal_bg = document.getElementById("modal_bg") as HTMLDivElement;
 const modal_content = document.getElementById(
@@ -41,20 +42,35 @@ const modal_add_close = function (): void {
     modal_add.classList.remove("block");
 };
 
-edit_btns.forEach((btn) => {
-    btn.addEventListener("click", async () => {
-        modal_open();
-        title_inp.value = btn.dataset.title!;
-        desc_inp.value = btn.dataset.desc!;
-        due_inp.value = btn.dataset.due!;
+document.addEventListener("DOMContentLoaded", () => {
+    edit_btns.forEach((btn) => {
+        btn.addEventListener("click", async () => {
+            modal_open();
+            title_inp.value = btn.dataset.title!;
+            desc_inp.value = btn.dataset.desc!;
+            due_inp.value = btn.dataset.due!;
 
-        edit_form.action = `/todos/${btn.dataset.id!}`;
+            edit_form.action = `/todos/${btn.dataset.id!}`;
+        });
     });
+
+    const todo_boxes: NodeListOf<HTMLDivElement> =
+        document.querySelectorAll(".todo_box");
+
+    todo_boxes.forEach((todo_box) => {
+        if (todo_box.dataset.is_completed! == "1") {
+            todo_box.classList.add("bg-green-200");
+            const comp_form = todo_box.querySelector("#comp_form");
+            comp_form?.classList.add("hidden");
+        } else {
+            todo_box.classList.add("bg-neutral-50");
+        }
+    });
+
+    modal_bg.addEventListener("click", () => modal_close());
+    modal_content.addEventListener("click", (e) => e.stopPropagation());
+
+    add_btn.addEventListener("click", () => modal_add_open());
+    modal_add_bg.addEventListener("click", () => modal_add_close());
+    modal_add_content.addEventListener("click", (e) => e.stopPropagation());
 });
-
-modal_bg.addEventListener("click", () => modal_close());
-modal_content.addEventListener("click", (e) => e.stopPropagation());
-
-add_btn.addEventListener("click", () => modal_add_open());
-modal_add_bg.addEventListener("click", () => modal_add_close());
-modal_add_content.addEventListener("click", (e) => e.stopPropagation());

@@ -7,16 +7,17 @@
         <title>Document</title>
     </head>
     <body class="bg-black flex flex-col min-h-screen">
+        
         <!-- Navbar -->
+         
         <div
             class="flex justify-between items-center pl-4 pr-6 bg-neutral-800 text-white h-16"
         >
-            <!-- logo -->
             <div class="h-full flex justify-start font-bold">
                 <img src="{{ asset('images/logo.png') }}" alt="" />
                 <p class="flex h-full items-center">To-Do List</p>
             </div>
-            <!-- logo -->
+            
             <button
                 id="add_btn"
                 class="cursor-pointer flex justify-center items-center rounded-full border border-white py-1.5 px-2.5 hover:scale-110 transition duration-250"
@@ -24,16 +25,17 @@
                 Dodaj
             </button>
         </div>
-        <!-- Navbar -->
+        
         <!-- main -->
+         
         <div class="flex-1 flex">
-            <!-- left -->
             <div
                 class="flex flex-1 flex-col justify-center items-center bg-neutral-200"
             >
                 @foreach($todos as $todo)
                 <div
-                    class="flex flex-col justify-center items-center rounded-2xl py-4 px-6 bg-neutral-50 w-180 mb-8"
+                    class="todo_box flex flex-col justify-center items-center rounded-2xl py-4 px-6  w-180 mb-8"
+                    data-is_completed="{{ $todo->is_completed }}"
                 >
                     <div
                         class="text-xl mb-2 flex w-full justify-between items-start px-6"
@@ -47,6 +49,17 @@
                     <div
                         class="flex w-full mr-8 justify-end items-center gap-4 mt-4"
                     >
+                        <form action="{{ route('todos.complete', $todo->id) }}" method="post" id="comp_form">
+                            @csrf
+                            @method('PATCH')
+                            <button
+                            type="submit"
+                            class="delete_btn text-green-400 hover:scale-110 duration-250"
+                            onclick="return confirm('Czy napewno chcesz oznaczyc ten wpis jako ukonczony?')"
+                            >
+                            Ukończ
+                            </button>
+                        </form>
                         <button
                             type="button"
                             data-id="{{ $todo->id }}"
@@ -71,12 +84,18 @@
                     </div>
                 </div>
                 @endforeach
+                @if ($errors->any())
+                    <ul class="flex justify-center items-center flex-col mt-6">
+                        @foreach($errors->all() as $error)
+                        <li class="text-red-600">{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
-            <!-- left -->
-            <!-- right -->
-            <!-- right -->
         </div>
-        <!-- editz -->
+        
+        <!-- edit -->
+         
         <div id="modal" class="w-screen h-screen hidden absolute">
             <div id="modal_bg" class="inset-0 bg-black/50 absolute">
                 <div
@@ -118,7 +137,9 @@
                 </div>
             </div>
         </div>
+        
         <!-- add -->
+         
         <div id="modal_add" class="w-screen h-screen hidden absolute">
             <div id="modal_add_bg" class="inset-0 bg-black/50 absolute">
                 <div
@@ -163,14 +184,9 @@
                 </div>
             </div>
         </div>
-        <!-- main -->
-        <!-- footer -->
-
         <footer
             class="flex justify-start items-center text-white px-4 bg-neutral-800 h-16"
         >
-            Autor:
         </footer>
-        <!-- footer -->
     </body>
 </html>

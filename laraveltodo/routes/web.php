@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
 //     return view('todos.index');
 // })->name('home');
 
+Route::patch('/todos/{id}/complete', [TodoController::class, 'complete']) -> name('todos.complete');
+
 Route::resource('todos', TodoController::class);
 
 Route::get('/', function(){
