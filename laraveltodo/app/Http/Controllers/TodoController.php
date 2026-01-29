@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Todo;
 use Illuminate\Http\Request;
 
+use function Pest\Laravel\delete;
+
 class TodoController extends Controller
 {
     /**
@@ -14,14 +16,6 @@ class TodoController extends Controller
     {
         $todos = Todo::all();
         return view('todos.index', compact('todos'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // return view('home');
     }
 
     /**
@@ -39,34 +33,28 @@ class TodoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Todo $todo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Todo $todo)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request, $id)
     {
-        //
+        $todo = Todo::findOrFail($id);
+        $validated = $request->validate([
+            'title' => 'required',            
+           'desc' => 'required',
+           'due' => 'required',
+        ]);
+        $todo -> update($validated);
+        return redirect() -> route('todos.index') -> with('success', 'updated succesfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Todo $todo)
+    public function destroy($id)
     {
-        //
+        $todo = Todo::findOrFail($id);
+        $todo -> delete();
+
+        return redirect() -> route('todos.index') -> with('success', 'Deletd succesfully');
     }
 }

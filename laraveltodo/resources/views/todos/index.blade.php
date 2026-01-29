@@ -49,16 +49,25 @@
                     >
                         <button
                             type="button"
+                            data-id="{{ $todo->id }}"
+                            data-title="{{ $todo->title }}"
+                            data-desc="{{ $todo->desc }}"
+                            data-due="{{ $todo->due }}"
                             class="edit_btn text-blue-400 hover:scale-110 duration-250"
                         >
                             Edytuj
                         </button>
-                        <button
-                            type="button"
+                        <form action="{{ route('todos.destroy', $todo->id) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <button
+                            type="submit"
                             class="delete_btn text-red-400 hover:scale-110 duration-250"
-                        >
+                            onclick="return confirm('Czy napewno chcesz USUNĄĆ ten wpis?')"
+                            >
                             Usuń
-                        </button>
+                            </button>
+                        </form>
                     </div>
                 </div>
                 @endforeach
@@ -75,8 +84,9 @@
                     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col px-26 pb-18 pt-16 justify-start items-center gap-4 bg-neutral-100 rounded-2xl"
                 >
                     <h1 class="text-lg">Edytuj Wpis</h1>
-                    <form action="" method="post" class="flex flex-col gap-4">
+                    <form id="edit_form" action="" method="post" class="flex flex-col gap-4">
                         @csrf
+                        @method('PUT')
                         <input
                             type="text"
                             id="title"
@@ -124,26 +134,26 @@
                         @csrf
                         <input
                             type="text"
-                            id="title"
+                            
                             name="title"
                             placeholder="Nazwa..."
                             class="rounded-2xl border px-2.5 py-1.5 focus:scale-110 transition duration-250"
                         />
                         <textarea
-                            id="desc"
+                            
                             name="desc"
                             placeholder="Opis..."
                             class="resize-none rounded-2xl border px-2.5 py-1.5 focus:scale-110 transition duration-250"
                         ></textarea>
                         <input
                             type="date"
-                            id="due"
+                            
                             name="due"
                             class="rounded-2xl border px-2.5 py-1.5 focus:scale-110 transition duration-250"
                         />
                         <button
                             type="submit"
-                            id="save"
+                            
                             name="save"
                             class="bg-neutral-300 text-neutral-900 py-1 px-0.5 border rounded-xl hover:bg-neutral-200 hover:text-neutral-700 transition"
                         >
